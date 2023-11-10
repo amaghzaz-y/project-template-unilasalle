@@ -1,0 +1,53 @@
+name: CI
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@master
+      - uses: ruby/setup-ruby@v1
+        with:
+        ruby-version: '3.2'
+        bundler-cache: true
+      - name: Download Jekyll
+        run: |
+          apt-get install ruby-full build-essential zlib1g-dev
+          echo '# Install Ruby Gems to ~/gems' >> ~/.bashrc
+          echo 'export GEM_HOME="$HOME/gems"' >> ~/.bashrc
+          echo 'export PATH="$HOME/gems/bin:$PATH"' >> ~/.bashrc
+          source ~/.bashrc
+          gem install jekyll bundler
+
+      # Runs a set of commands using the runners shell
+      - name: download and add just-the-docs plugin
+        run: |
+          gem install just-the-docs
+          bundle add just-the-docs
+    
+      - name: create a new project with jekyll
+        run: jekyll new docs-new
+      - name: configure jekyll project
+        run: |
+          cp -r ./docs ./docs-new
+          rm ./docs-new/_config.yml
+          cp _confi.yml ./docs-new
+      - name: build docs
+        run: jekyll build
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: docs-new/_site
