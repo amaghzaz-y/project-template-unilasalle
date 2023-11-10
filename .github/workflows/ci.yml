@@ -51,6 +51,7 @@ jobs:
       - name: build docs
         run: |
           cd ./docs-new
+          bundle install
           jekyll build
       
       - name: Deploy 🚀
