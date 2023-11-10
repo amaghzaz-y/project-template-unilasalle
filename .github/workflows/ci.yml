@@ -32,14 +32,16 @@ jobs:
           source ~/.bashrc
           sudo gem install jekyll bundler
 
-      # Runs a set of commands using the runners shell
+      - name: create a new project with jekyll
+        run: jekyll new docs-new
+      
       - name: download and add just-the-docs plugin
         run: |
           sudo gem install just-the-docs
+          cd ./docs-new
           sudo bundle add just-the-docs
-    
-      - name: create a new project with jekyll
-        run: jekyll new docs-new
+          cd ..
+ 
       - name: configure jekyll project
         run: |
           cp -r ./docs ./docs-new
