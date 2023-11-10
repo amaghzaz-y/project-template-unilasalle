@@ -56,13 +56,13 @@ jobs:
         id: pages
         uses: actions/configure-pages@v3
      
-      - name: Jekyll - installing dependencies...
+      - name: Jekyll - installing dependencies
         run: |
           cd ./docs-new
           bundle install
       
-      - name: Jekyll - building...
-        run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
+      - name: Jekyll - build
+        run: jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
         env:
           JEKYLL_ENV: production
      
