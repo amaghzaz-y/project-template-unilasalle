@@ -1,4 +1,6 @@
 name: CI
+permissions:
+  contents: write
 on:
   push:
     branches: [ "main" ]
@@ -58,3 +60,4 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: docs-new/_site
+   
