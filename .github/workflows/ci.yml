@@ -46,7 +46,7 @@ jobs:
         run: |
           cp -r ./docs ./docs-new
           rm ./docs-new/_config.yml
-          cp _confi.yml ./docs-new
+          cp _config.yml ./docs-new
       - name: build docs
         run: jekyll build
       - name: Deploy 🚀
