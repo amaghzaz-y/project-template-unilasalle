@@ -47,9 +47,13 @@ jobs:
           cp -r ./docs ./docs-new
           rm ./docs-new/_config.yml
           cp _config.yml ./docs-new
+      
       - name: build docs
-        run: jekyll build
+        run: |
+          cd ./docs-new
+          jekyll build
+      
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: docs-new/_site
+          folder: _site
