@@ -9,27 +9,23 @@ on:
   pull_request:
     branches: [ "main" ]
 
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build-and-deploy:
-    # The type of runner that the job will run on
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@master
+      
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.2'
           bundler-cache: true
+     
       - name: Download Jekyll
         run: |
           sudo apt-get install ruby-full build-essential zlib1g-dev
@@ -49,24 +45,30 @@ jobs:
           sudo bundle add just-the-docs
           cd ..
  
+      
       - name: configure jekyll project
         run: |
           cp -r ./docs ./docs-new
           rm ./docs-new/_config.yml
           cp _config.yml ./docs-new
+      
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v3
-      - name: Build with Jekyll
-        # Outputs to the './_site' directory by default
+     
+      - name: Jekyll - installing dependencies...
         run: |
           cd ./docs-new
-          bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
+          bundle install
+      
+      - name: Jekyll - building...
+        run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
         env:
           JEKYLL_ENV: production
+     
       - name: Upload artifact
-        # Automatically uploads an artifact from the './_site' directory by default
         uses: actions/upload-pages-artifact@v1
+     
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
