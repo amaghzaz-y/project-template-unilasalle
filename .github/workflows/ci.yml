@@ -15,8 +15,11 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  configuration:
+  build-and-deploy:
     # The type of runner that the job will run on
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -51,13 +54,6 @@ jobs:
           cp -r ./docs ./docs-new
           rm ./docs-new/_config.yml
           cp _config.yml ./docs-new
-  build:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: configuration
-    steps:
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v3
@@ -74,8 +70,4 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
-      # - name: Deploy 🚀
-      #   uses: JamesIves/github-pages-deploy-action@v4
-      #   with:
-      #     folder: docs-new/_site
    
