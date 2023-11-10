@@ -21,8 +21,8 @@ jobs:
       - uses: actions/checkout@master
       - uses: ruby/setup-ruby@v1
         with:
-        ruby-version: '3.2'
-        bundler-cache: true
+          ruby-version: '3.2'
+          bundler-cache: true
       - name: Download Jekyll
         run: |
           apt-get install ruby-full build-essential zlib1g-dev
